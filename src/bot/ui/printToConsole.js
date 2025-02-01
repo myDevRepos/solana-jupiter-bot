@@ -543,112 +543,147 @@ function printToTerminal({
 	try {
 		if (cache.ui.allowClear) {
 			console.clear();
-			console.log("-------------------------------------------");
-			console.log(`TIMESTAMP: ${date.toLocaleString()}`);
-			console.log(`Iteration: ${i} | ${cache.iterationPerMinute.value} i/min`);
-			console.log(`RPC: ${cache.config.rpc[0]}`);
-			console.log(`LOOKUP (ROUTE): ${performanceOfRouteComp.toFixed()} ms`);
-			console.log(`STARTED: ${moment(cache.startTime).fromNow()}`);
+
+			const green = "\x1b[32m";
+			const red = "\x1b[31m";
+			const yellow = "\x1b[33m";
+			const reset = "\x1b[0m";
+			const bold = "\x1b[1m";
+			const divider = "-------------------------------------------";
+
+			console.log(bold + divider + reset);
 			console.log(
-				`MIN INTERVAL: ${cache.config.minInterval} ms QUEUE: ${
-					Object.keys(cache.queue).length
-				}/${cache.queueThrottle}`
-			);
-			console.log("-------------------------------------------");
-			console.log(
-				`IN: ${toDecimal(String(route.inAmount), inputToken.decimals)} ${
-					inputToken.symbol
-				}`
+				`${bold}TIMESTAMP: ${reset}${yellow}${date.toLocaleString()}${reset}`
 			);
 			console.log(
-				`OUT: ${toDecimal(String(route.outAmount), outputToken.decimals)} ${
-					outputToken.symbol
-				}`
+				`${bold}Iteration: ${reset}${green}${i} | ${cache.iterationPerMinute.value} i/min${reset}`
 			);
 			console.log(
-				`PROFIT: ${simulatedProfit.toFixed(2)}% (Min: ${
+				`${bold}RPC: ${reset}${yellow}${cache.config.rpc[0]}${reset}`
+			);
+			console.log(
+				`${bold}LOOKUP (ROUTE): ${reset}${red}${performanceOfRouteComp.toFixed()} ms${reset}`
+			);
+			console.log(
+				`${bold}STARTED: ${reset}${green}${moment(
+					cache.startTime
+				).fromNow()}${reset}`
+			);
+			console.log(
+				`${bold}MIN INTERVAL: ${reset}${yellow}${
+					cache.config.minInterval
+				} ms QUEUE: ${Object.keys(cache.queue).length}/${
+					cache.queueThrottle
+				}${reset}`
+			);
+			console.log(bold + divider + reset);
+
+			console.log(
+				`${bold}IN: ${reset}${green}${toDecimal(
+					String(route.inAmount),
+					inputToken.decimals
+				)} ${inputToken.symbol}${reset}`
+			);
+			console.log(
+				`${bold}OUT: ${reset}${green}${toDecimal(
+					String(route.outAmount),
+					outputToken.decimals
+				)} ${outputToken.symbol}${reset}`
+			);
+			console.log(
+				`${bold}PROFIT: ${reset}${
+					simulatedProfit > 0 ? green : red
+				}${simulatedProfit.toFixed(2)}% (Min: ${
 					cache.config.minPercProfit
-				}%)`
+				}%)${reset}`
 			);
-			console.log(`SLIPPAGE: ${cache.config.slippage} BPS`);
-			console.log(`W/UNWRAP SOL: ${cache.wrapUnwrapSOL ? "on" : "off"}`);
-			console.log("-------------------------------------------");
 			console.log(
-				`CURRENT BALANCE: ${toDecimal(
+				`${bold}SLIPPAGE: ${reset}${yellow}${cache.config.slippage} BPS${reset}`
+			);
+			console.log(
+				`${bold}W/UNWRAP SOL: ${reset}${
+					cache.wrapUnwrapSOL ? green + "ON" : red + "OFF"
+				}${reset}`
+			);
+			console.log(bold + divider + reset);
+
+			console.log(
+				`${bold}CURRENT BALANCE: ${reset}${green}${toDecimal(
 					cache.currentBalance.tokenA,
 					tokenA.decimals
-				)} ${tokenA.symbol}`
+				)} ${tokenA.symbol}${reset}`
 			);
 			console.log(
-				`LAST BALANCE: ${toDecimal(
+				`${bold}LAST BALANCE: ${reset}${yellow}${toDecimal(
 					cache.lastBalance.tokenA,
 					tokenA.decimals
-				)} ${tokenA.symbol}`
+				)} ${tokenA.symbol}${reset}`
 			);
 			console.log(
-				`INIT BALANCE: ${toDecimal(
+				`${bold}INIT BALANCE: ${reset}${red}${toDecimal(
 					cache.initialBalance.tokenA,
 					tokenA.decimals
-				)} ${tokenA.symbol}`
-			);
-			console.log(`CURRENT PROFIT: ${cache.currentProfit.tokenA.toFixed(2)}%`);
-			console.log("-------------------------------------------");
-			console.log(
-				`CURRENT BALANCE: ${toDecimal(
-					cache.currentBalance.tokenB,
-					tokenB.decimals
-				)} ${tokenB.symbol}`
+				)} ${tokenA.symbol}${reset}`
 			);
 			console.log(
-				`LAST BALANCE: ${toDecimal(
-					cache.lastBalance.tokenB,
-					tokenB.decimals
-				)} ${tokenB.symbol}`
+				`${bold}CURRENT PROFIT: ${reset}${
+					simulatedProfit > 0 ? green : red
+				}${cache.currentProfit.tokenA.toFixed(2)}%${reset}`
+			);
+			console.log(bold + divider + reset);
+
+			console.log(
+				`${bold}BUY SUCCESS: ${reset}${green}${cache.tradeCounter.buy.success} ✅ | ${bold}BUY FAIL: ${reset}${red}${cache.tradeCounter.buy.fail} ❌${reset}`
 			);
 			console.log(
-				`INIT BALANCE: ${toDecimal(
-					cache.initialBalance.tokenB,
-					tokenB.decimals
-				)} ${tokenB.symbol}`
-			);
-			console.log(`CURRENT PROFIT: ${cache.currentProfit.tokenB.toFixed(2)}%`);
-			console.log("-------------------------------------------");
-			console.log(
-				`BUY SUCCESS: ${cache.tradeCounter.buy.success} | BUY FAIL: ${cache.tradeCounter.buy.fail}`
+				`${bold}SELL SUCCESS: ${reset}${green}${cache.tradeCounter.sell.success} ✅ | ${bold}SELL FAIL: ${reset}${red}${cache.tradeCounter.sell.fail} ❌${reset}`
 			);
 			console.log(
-				`SELL SUCCESS: ${cache.tradeCounter.sell.success} | SELL FAIL: ${cache.tradeCounter.sell.fail}`
+				`${bold}FAILED BALANCE CHECK: ${reset}${yellow}${cache.tradeCounter.failedbalancecheck}${reset}`
 			);
 			console.log(
-				`FAILED BALANCE CHECK: ${cache.tradeCounter.failedbalancecheck}`
+				`${bold}ERROR COUNT: ${reset}${red}${cache.tradeCounter.errorcount}${reset}`
 			);
-			console.log(`ERROR COUNT: ${cache.tradeCounter.errorcount}`);
-			console.log("-------------------------------------------");
-			console.log(`MAX (BUY): ${cache.maxProfitSpotted.buy.toFixed(2)}%`);
-			console.log(`MAX (SELL): ${cache.maxProfitSpotted.sell.toFixed(2)}%`);
+			console.log(bold + divider + reset);
+
 			console.log(
-				`ADAPTIVE SLIPPAGE: ${
-					cache.config.adaptiveSlippage == 1 ? "ON" : "OFF"
-				}`
+				`${bold}MAX (BUY): ${reset}${green}${cache.maxProfitSpotted.buy.toFixed(
+					2
+				)}%${reset}`
 			);
-			console.log("-------------------------------------------");
-			console.log("TRADE HISTORY:");
+			console.log(
+				`${bold}MAX (SELL): ${reset}${green}${cache.maxProfitSpotted.sell.toFixed(
+					2
+				)}%${reset}`
+			);
+			console.log(
+				`${bold}ADAPTIVE SLIPPAGE: ${reset}${
+					cache.config.adaptiveSlippage == 1 ? green + "ON" : red + "OFF"
+				}${reset}`
+			);
+			console.log(bold + divider + reset);
+
+			console.log(`${bold}TRADE HISTORY:${reset}`);
 			cache.tradeHistory.slice(-5).forEach((entry) => {
 				console.log(
-					`${entry.date} | ${entry.buy ? "BUY" : "SELL"} | IN: ${
-						entry.inAmount
-					} ${entry.inputToken} | OUT: ${entry.outAmount} ${
+					`${yellow}${entry.date}${reset} | ${
+						entry.buy ? green + "BUY" : red + "SELL"
+					}${reset} | IN: ${green}${entry.inAmount} ${
+						entry.inputToken
+					}${reset} | OUT: ${green}${entry.outAmount} ${
 						entry.outputToken
-					} | PROFIT: ${entry.profit.toFixed(2)}% | EXPECTED OUT: ${
+					}${reset} | PROFIT: ${
+						entry.profit > 0 ? green : red
+					}${entry.profit.toFixed(2)}%${reset} | EXPECTED OUT: ${yellow}${
 						entry.expectedOutAmount
 					} ${
 						entry.outputToken
-					} | EXPECTED PROFIT: ${entry.expectedProfit.toFixed(2)}% | ERROR: ${
-						entry.error ? entry.error : "-"
-					}`
+					}${reset} | EXPECTED PROFIT: ${yellow}${entry.expectedProfit.toFixed(
+						2
+					)}%${reset} | ERROR: ${entry.error ? red + entry.error : "-"}${reset}`
 				);
 			});
-			console.log("-------------------------------------------");
+			console.log(bold + divider + reset);
 		}
 	} catch (error) {
 		console.error("Error printing to console:", error);

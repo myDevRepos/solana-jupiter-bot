@@ -176,50 +176,20 @@ const setup = async () => {
 
 		// spinner.text = "Loading the Jupiter V4 SDK and getting ready to trade...";
 		console.log("Loading the Jupiter V4 SDK and getting ready to trade...");
+		let jupiter;
+		try {
+			jupiter = await Jupiter.load({
+				connection,
+				cluster: cache.config.network,
+				user: wallet,
+				restrictIntermediateTokens: false,
+				shouldLoadSerumOpenOrders: false,
+				wrapUnwrapSOL: cache.wrapUnwrapSOL,
+			});
+		} catch (error) {
+			console.log(error);
+		}
 
-		const jupiter = await Jupiter.load({
-			connection,
-			cluster: cache.config.network,
-			user: wallet,
-			restrictIntermediateTokens: false,
-			shouldLoadSerumOpenOrders: false,
-			wrapUnwrapSOL: cache.wrapUnwrapSOL,
-			ammsToExclude: {
-				Aldrin: false,
-				Crema: false,
-				Cropper: true,
-				Cykura: true,
-				DeltaFi: false,
-				GooseFX: true,
-				Invariant: false,
-				Lifinity: false,
-				"Lifinity V2": false,
-				Marinade: false,
-				Mercurial: false,
-				Meteora: false,
-				Raydium: false,
-				"Raydium CLMM": false,
-				Saber: false,
-				Serum: true,
-				Orca: false,
-				Step: false,
-				Penguin: false,
-				Saros: false,
-				Stepn: true,
-				"Orca (Whirlpools)": false,
-				Sencha: false,
-				"Saber (Decimals)": false,
-				Dradex: true,
-				Balansol: true,
-				Openbook: false,
-				"Marco Polo": false,
-				Oasis: false,
-				BonkSwap: false,
-				Phoenix: false,
-				Symmetry: true,
-				Unknown: true,
-			},
-		});
 		cache.isSetupDone = true;
 		console.log(
 			"Checking to ensure you are ARB ready...\n====================\n"

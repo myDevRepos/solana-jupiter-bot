@@ -542,7 +542,7 @@ function printToTerminal({
 }) {
 	try {
 		if (cache.ui.allowClear) {
-			console.clear();
+			process.stdout.write("\x1b[H\x1b[2J\x1b[3J"); // Clears the terminal screen properly in MobaXterm
 
 			const green = "\x1b[32m";
 			const red = "\x1b[31m";
@@ -605,30 +605,10 @@ function printToTerminal({
 					cache.wrapUnwrapSOL ? green + "ON" : red + "OFF"
 				}${reset}`
 			);
-			console.log(bold + divider + reset);
-
 			console.log(
-				`${bold}CURRENT BALANCE: ${reset}${green}${toDecimal(
-					cache.currentBalance.tokenA,
-					tokenA.decimals
-				)} ${tokenA.symbol}${reset}`
-			);
-			console.log(
-				`${bold}LAST BALANCE: ${reset}${yellow}${toDecimal(
-					cache.lastBalance.tokenA,
-					tokenA.decimals
-				)} ${tokenA.symbol}${reset}`
-			);
-			console.log(
-				`${bold}INIT BALANCE: ${reset}${red}${toDecimal(
-					cache.initialBalance.tokenA,
-					tokenA.decimals
-				)} ${tokenA.symbol}${reset}`
-			);
-			console.log(
-				`${bold}CURRENT PROFIT: ${reset}${
-					simulatedProfit > 0 ? green : red
-				}${cache.currentProfit.tokenA.toFixed(2)}%${reset}`
+				`${bold}SWAP STATUS: ${reset}${
+					cache.swappingRightNow ? green + "ON 🔄" : red + "OFF ❌"
+				}${reset}`
 			);
 			console.log(bold + divider + reset);
 
@@ -644,45 +624,6 @@ function printToTerminal({
 			console.log(
 				`${bold}ERROR COUNT: ${reset}${red}${cache.tradeCounter.errorcount}${reset}`
 			);
-			console.log(bold + divider + reset);
-
-			console.log(
-				`${bold}MAX (BUY): ${reset}${green}${cache.maxProfitSpotted.buy.toFixed(
-					2
-				)}%${reset}`
-			);
-			console.log(
-				`${bold}MAX (SELL): ${reset}${green}${cache.maxProfitSpotted.sell.toFixed(
-					2
-				)}%${reset}`
-			);
-			console.log(
-				`${bold}ADAPTIVE SLIPPAGE: ${reset}${
-					cache.config.adaptiveSlippage == 1 ? green + "ON" : red + "OFF"
-				}${reset}`
-			);
-			console.log(bold + divider + reset);
-
-			console.log(`${bold}TRADE HISTORY:${reset}`);
-			cache.tradeHistory.slice(-5).forEach((entry) => {
-				console.log(
-					`${yellow}${entry.date}${reset} | ${
-						entry.buy ? green + "BUY" : red + "SELL"
-					}${reset} | IN: ${green}${entry.inAmount} ${
-						entry.inputToken
-					}${reset} | OUT: ${green}${entry.outAmount} ${
-						entry.outputToken
-					}${reset} | PROFIT: ${
-						entry.profit > 0 ? green : red
-					}${entry.profit.toFixed(2)}%${reset} | EXPECTED OUT: ${yellow}${
-						entry.expectedOutAmount
-					} ${
-						entry.outputToken
-					}${reset} | EXPECTED PROFIT: ${yellow}${entry.expectedProfit.toFixed(
-						2
-					)}%${reset} | ERROR: ${entry.error ? red + entry.error : "-"}${reset}`
-				);
-			});
 			console.log(bold + divider + reset);
 		}
 	} catch (error) {

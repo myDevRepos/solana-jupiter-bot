@@ -27,11 +27,11 @@ const isArbReady = async () => {
     }
 };
 
-isArbReady().then((arbReady) => {
-	if (!arbReady) {
-        process.exit(1); // Exit the process if ARB is not ready
-    }
-});
+// isArbReady().then((arbReady) => {
+// 	if (!arbReady) {
+//         process.exit(1); // Exit the process if ARB is not ready
+//     }
+// });
 
 const wizard = importJsx("./wizard/index");
 

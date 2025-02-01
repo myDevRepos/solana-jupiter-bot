@@ -17,6 +17,7 @@ const { handleExit, logExit } = require("./exit");
 const cache = require("./cache");
 const { setup, getInitialotherAmountThreshold, checkTokenABalance } = require("./setup");
 const { printToConsole } = require("./ui/");
+const {printToTerminal } = require("./printToTerminal");
 const { swap, failedSwapHandler, successSwapHandler } = require("./swap");
 
 const waitabit = async (ms) => {
@@ -115,7 +116,18 @@ const pingpongStrategy = async (jupiter, tokenA, tokenB) => {
 			cache.maxProfitSpotted[cache.sideBuy ? "buy" : "sell"] = simulatedProfit;
 		}
 
-		printToConsole({
+		// printToConsole({
+		// 	date,
+		// 	i,
+		// 	performanceOfRouteComp,
+		// 	inputToken,
+		// 	outputToken,
+		// 	tokenA,
+		// 	tokenB,
+		// 	route,
+		// 	simulatedProfit,
+		// });
+		printToTerminal({
 			date,
 			i,
 			performanceOfRouteComp,
@@ -126,7 +138,6 @@ const pingpongStrategy = async (jupiter, tokenA, tokenB) => {
 			route,
 			simulatedProfit,
 		});
-
 		// check profitability and execute tx
 		let tx, performanceOfTx;
 		if (
@@ -162,7 +173,19 @@ const pingpongStrategy = async (jupiter, tokenA, tokenB) => {
 				// start refreshing status
 				const printTxStatus = setInterval(() => {
 					if (cache.swappingRightNow) {
-						printToConsole({
+						// printToConsole({
+						// 	date,
+						// 	i,
+						// 	performanceOfRouteComp,
+						// 	inputToken,
+						// 	outputToken,
+						// 	tokenA,
+						// 	tokenB,
+						// 	route,
+						// 	simulatedProfit,
+						// });
+
+						printToTerminal({
 							date,
 							i,
 							performanceOfRouteComp,
@@ -173,6 +196,7 @@ const pingpongStrategy = async (jupiter, tokenA, tokenB) => {
 							route,
 							simulatedProfit,
 						});
+						
 					}
 				}, 50);
 
@@ -220,7 +244,7 @@ const pingpongStrategy = async (jupiter, tokenA, tokenB) => {
 			cache.swappingRightNow = false;
 		}
 
-		printToConsole({
+		printToTerminal({
 			date,
 			i,
 			performanceOfRouteComp,
@@ -326,7 +350,7 @@ const arbitrageStrategy = async (jupiter, tokenA) => {
 			cache.maxProfitSpotted["buy"] = simulatedProfit;
 		}
 
-		printToConsole({
+		printToTerminal({
 			date,
 			i,
 			performanceOfRouteComp,
@@ -373,7 +397,7 @@ const arbitrageStrategy = async (jupiter, tokenA) => {
 				// start refreshing status
 				const printTxStatus = setInterval(() => {
 					if (cache.swappingRightNow) {
-						printToConsole({
+						printToTerminal({
 							date,
 							i,
 							performanceOfRouteComp,
@@ -424,7 +448,7 @@ const arbitrageStrategy = async (jupiter, tokenA) => {
 			cache.swappingRightNow = false;
 		}
 
-		printToConsole({
+		printToTerminal({
 			date,
 			i,
 			performanceOfRouteComp,
@@ -460,7 +484,7 @@ const watcher = async (jupiter, tokenA, tokenB) => {
 const run = async () => {
 	try {
 		// Are they ARB ready and part of the community?
-		await checkArbReady();
+		// await checkArbReady();
 
 		// set everything up
         const { jupiter, tokenA, tokenB, wallet } = await setup();

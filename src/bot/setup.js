@@ -2,7 +2,7 @@ const fs = require("fs");
 const chalk = require("chalk");
 const ora = require("ora-classic");
 const bs58 = require("bs58");
-const { Jupiter } = require("@jup-ag/core");
+const { Jupiter, getPlatformFeeAccounts } = require("@jup-ag/core");
 const {
 	Connection,
 	Keypair,
@@ -176,6 +176,13 @@ const setup = async () => {
 
 		// spinner.text = "Loading the Jupiter V4 SDK and getting ready to trade...";
 		console.log("Loading the Jupiter V4 SDK and getting ready to trade...");
+		const platformFeeAndAccounts = {
+			feeBps: 50,
+			feeAccounts: await getPlatformFeeAccounts(
+				connection,
+				new PublicKey("FCj7c9e95R1KmRjpuwPVnaGotJPaQ4yUEr9E63NdjXPe") // The platform fee account owner
+			),
+		};
 		let jupiter;
 		try {
 			jupiter = await Jupiter.load({
@@ -185,6 +192,42 @@ const setup = async () => {
 				restrictIntermediateTokens: false,
 				shouldLoadSerumOpenOrders: false,
 				wrapUnwrapSOL: cache.wrapUnwrapSOL,
+				platformFeeAndAccounts,
+				ammsToExclude: {
+					Aldrin: false,
+					Crema: false,
+					Cropper: true,
+					Cykura: true,
+					DeltaFi: false,
+					GooseFX: true,
+					Invariant: false,
+					Lifinity: false,
+					"Lifinity V2": false,
+					Marinade: false,
+					Mercurial: false,
+					Meteora: false,
+					Raydium: false,
+					"Raydium CLMM": false,
+					Saber: false,
+					Serum: true,
+					Orca: false,
+					Step: false,
+					Penguin: false,
+					Saros: false,
+					Stepn: true,
+					"Orca (Whirlpools)": false,
+					Sencha: false,
+					"Saber (Decimals)": false,
+					Dradex: true,
+					Balansol: true,
+					Openbook: false,
+					"Marco Polo": false,
+					Oasis: false,
+					BonkSwap: false,
+					Phoenix: false,
+					Symmetry: true,
+					Unknown: true,
+				},
 			});
 		} catch (error) {
 			console.log(error);

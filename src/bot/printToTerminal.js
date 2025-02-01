@@ -1,3 +1,6 @@
+const { toDecimal } = require("../utils");
+const moment = require("moment");
+
 function printToTerminal({
 	date,
 	i,

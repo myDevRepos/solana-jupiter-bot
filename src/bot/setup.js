@@ -234,7 +234,7 @@ const setup = async () => {
 		// 		chalk.bold.redBright(`Setting up failed!\n 	${spinner.text}`)
 		// 	);
 		// logExit(1, error);
-		process.exitCode = 1;
+		// process.exitCode = 1;
 	}
 };
 
